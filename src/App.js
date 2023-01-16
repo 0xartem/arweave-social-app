@@ -54,6 +54,7 @@ const App = () => {
           <WalletSelectButton
             setIsConnected={() => setIsWalletConnected(true)}
           />
+          <ProfileButton isWalletConnected={isWalletConnected} />
         </aside>
         <main>
           <Routes>

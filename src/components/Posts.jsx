@@ -22,6 +22,19 @@ const PostItem = (props) => {
   );
 
   React.useEffect(() => {
+    const getAccountInfo = async () => {
+      setOwnerName(abbreviateAddress(props.postInfo.owner));
+      const info = await props.postInfo.account;
+      setOwnerName(info.handle);
+      if (info.handle[0] == "@") {
+        props.postInfo.imgSrc = info.profile.avatarURL;
+        setImgSrc(info.profile.avatarURL);
+        setOwnerName(info.profile.name);
+        setOwnerHandle(info.handle);
+      }
+    };
+    getAccountInfo();
+
     let newPostMessage = "";
     let newStatus = "";
 

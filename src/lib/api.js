@@ -1,5 +1,13 @@
 import Arweave from "arweave";
+import Account from "arweave-account";
+
 export const arweave = Arweave.init({});
+
+export const account = new Account({
+  cacheIsActivated: true,
+  cacheSize: 100,
+  cacheTime: 3600000,
+});
 
 export const maxMessageLength = 1024;
 
@@ -17,6 +25,7 @@ export const createPostInfo = (node) => {
   const postInfo = {
     txid: node.id,
     owner: ownerAddress,
+    account: account.get(ownerAddress),
     height: height,
     length: node.data.size,
     timestamp: timestamp,
