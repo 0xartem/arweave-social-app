@@ -10,6 +10,7 @@ import { Navigation } from "./components/Navigation";
 import { WalletSelectButton } from "./components/WalletSelectButton";
 import { ProfileButton } from "./components/ProfileButton";
 import { Posts } from "./components/Posts";
+import { NewPost } from "./components/NewPost";
 import { ProgressSpinner } from "./components/ProgressSpinner";
 import { TopicSearch } from "./components/TopicSearch";
 import { UserSearch } from "./components/UserSearch";
@@ -59,7 +60,13 @@ const App = () => {
             <Route
               path="/"
               name="home"
-              element={<Home isSearching={isSearching} postInfos={postInfos} />}
+              element={
+                <Home
+                  isWalletConnected={isWalletConnected}
+                  isSearching={isSearching}
+                  postInfos={postInfos}
+                />
+              }
             />
             <Route path="/topics" element={<Topics />}>
               <Route path="/topics/" element={<TopicSearch />} />
@@ -80,6 +87,7 @@ const Home = (props) => {
   return (
     <>
       <header>Home</header>
+      <NewPost isLoggedIn={props.isWalletConnected} />
       {props.isSearching && <ProgressSpinner />}
       <Posts postInfos={props.postInfos} />
     </>
