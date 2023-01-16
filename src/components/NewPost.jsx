@@ -5,6 +5,13 @@ import { arweave, getTopicString } from "../lib/api";
 export const NewPost = (props) => {
   const [postValue, setPostValue] = React.useState("");
   const [isPosting, setIsPosting] = React.useState(false);
+  const [topicValue, setTopicValue] = React.useState("");
+
+  function onTopicChanged(e) {
+    let input = e.target.value;
+    let dashedTopic = getTopicString(input);
+    setTopicValue(dashedTopic);
+  }
 
   async function onPostButtonClicked() {
     setIsPosting(true);
@@ -13,10 +20,14 @@ export const NewPost = (props) => {
     tx.addTag("Content-Type", "text/plain");
     tx.addTag("Version", "1.0.1");
     tx.addTag("Type", "post");
+    if (topicValue) {
+      tx.addTag("Topic", topicValue);
+    }
 
     try {
       let result = await window.arweaveWallet.dispatch(tx);
       setPostValue("");
+      setTopicValue("");
       if (props.onPostMessage) {
         props.onPostMessage(result.id);
       }
@@ -35,16 +46,16 @@ export const NewPost = (props) => {
           <div className="newPostScrim" />
           <TextareaAutosize value={postValue} readOnly={true} />
           <div className="newPost-postRow">
-            {/* <div className="topic">
-              # 
+            <div className="topic">
+              #
               <input
-                type="text" 
+                type="text"
                 placeholder="topic"
                 className="topicInput"
                 value={topicValue}
                 disabled={true}
               />
-            </div> */}
+            </div>
             <div>
               <button className="submitButton" disabled={true}>
                 Post
@@ -63,18 +74,19 @@ export const NewPost = (props) => {
             placeholder="What do you have to say?"
           />
           <div className="newPost-postRow">
-            {/* <div className="topic"
-              style={{color: topicValue  && "rgb( 80, 162, 255)" }}
+            <div
+              className="topic"
+              style={{ color: topicValue && "rgb( 80, 162, 255)" }}
             >
-              # 
+              #
               <input
-                type="text" 
+                type="text"
                 placeholder="topic"
                 className="topicInput"
                 value={topicValue}
-                onChange={e => onTopicChanged(e)}
+                onChange={(e) => onTopicChanged(e)}
               />
-            </div> */}
+            </div>
             <div>
               <button
                 className="submitButton"

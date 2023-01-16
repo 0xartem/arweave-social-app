@@ -22,9 +22,14 @@ export const createPostInfo = (node) => {
   const timestamp = node?.block?.timestamp
     ? parseInt(node.block.timestamp, 10) * 1000
     : -1;
+
+  const topicTag = node.tags && node.tags.find((a) => a.name === "Topic");
+  const topic = topicTag ? topicTag.value : null;
+
   const postInfo = {
     txid: node.id,
     owner: ownerAddress,
+    topic: topic,
     account: account.get(ownerAddress),
     height: height,
     length: node.data.size,
@@ -46,7 +51,21 @@ export const createPostInfo = (node) => {
   return postInfo;
 };
 
-export const buildQuery = () => {
+export const buildQuery = ({ count, address, topic } = {}) => {
+  count = Math.min(100, count || 100);
+  let ownersFilter = "";
+  if (address) {
+    ownersFilter = `owners: ["${address}"],`;
+  }
+
+  let topicFilter = "";
+  if (topic) {
+    topicFilter = `{
+      name: "Topic",
+      values: ["${topic}"]
+    },`;
+  }
+
   const queryObject = {
     query: `{
     transactions(first: 100,

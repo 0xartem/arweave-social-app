@@ -82,6 +82,16 @@ const PostItem = (props) => {
     }
   }, [props.postInfo]);
 
+  const renderTopic = (topic) => {
+    if (topic) {
+      return (
+        <Link to={`/topics/${topic}`} className="postTopic">
+          #{topic}
+        </Link>
+      );
+    }
+  };
+
   return (
     <div className="postItem">
       <div className="postLayout">
@@ -99,6 +109,7 @@ const PostItem = (props) => {
             {props.postInfo.message || postMessage}
             {statusMessage && <div className="status"> {statusMessage}</div>}
           </div>
+          {renderTopic(props.postInfo.topic)}
         </div>
       </div>
     </div>
